@@ -13,9 +13,15 @@ public class DrehstromMotor {
     private double nennstrom;
     private double scheinleistungsQuotient;
     private double uebersetzung;
+    private double steigung;
+    private double verschiebung;
     DecimalFormat percentFormat = new DecimalFormat("##.#");
     DecimalFormat kWFormat = new DecimalFormat("#.###");
     public DrehstromMotor(String modell, double drehzahl, double drehmoment, double spannung, double nennstrom, double scheinleistungsQuotient, double uebersetzung) {
+        this(modell, drehzahl, drehmoment, spannung, nennstrom, scheinleistungsQuotient, uebersetzung, 0, 0);
+    }
+
+    public DrehstromMotor(String modell, double drehzahl, double drehmoment, double spannung, double nennstrom, double scheinleistungsQuotient, double uebersetzung, double steigung, double verschiebung) {
         this.modell = modell;
         this.drehmoment = drehmoment;
         this.drehzahl = drehzahl;
@@ -23,6 +29,8 @@ public class DrehstromMotor {
         this.nennstrom = nennstrom;
         this.scheinleistungsQuotient = scheinleistungsQuotient;
         this.uebersetzung = uebersetzung;
+        this.steigung = steigung;
+        this.verschiebung = verschiebung;
 
         if(!isValid()) {
             logger.warning("Fatal: Motor configuration is invalid! Exiting the program..");
