@@ -1,6 +1,8 @@
 package common;
 
-public class Motor {
+public class DrehstromMotor {
+
+    String modell;
 
     private double drehzahl;
     private double drehmoment;
@@ -8,7 +10,8 @@ public class Motor {
     private double nennstrom;
     private double scheinleistungsQuotient;
     private double uebersetzung;
-    Motor(double drehzahl, double drehmoment, double spannung,double nennstrom, double scheinleistungsQuotient, double uebersetzung) {
+    DrehstromMotor(String modell, double drehzahl, double drehmoment, double spannung, double nennstrom, double scheinleistungsQuotient, double uebersetzung) {
+        this.modell = modell;
         this.drehmoment = drehmoment;
         this.drehzahl = drehzahl;
         this.spannung = spannung;
@@ -17,7 +20,7 @@ public class Motor {
         this.uebersetzung = uebersetzung;
     }
 
-    Motor() {}
+    DrehstromMotor() {}
 
     public double getDrehzahl() {
         return drehzahl;
@@ -65,5 +68,13 @@ public class Motor {
 
     public void setUebersetzung(double uebersetzung) {
         this.uebersetzung = uebersetzung;
+    }
+
+    public String getModell() {
+        return modell;
+    }
+
+    public void getModell(String modell) {
+        this.modell = modell;
     }
 }
