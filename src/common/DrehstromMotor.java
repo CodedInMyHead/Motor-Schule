@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 public class DrehstromMotor {
 
     private static final Logger logger = Logger.getLogger("motor");
-    String modell;
+    private  String modell;
     private double drehzahl;
     private double drehmoment;
     private double spannung;
