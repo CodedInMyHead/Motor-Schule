@@ -13,8 +13,4 @@ public class DrehstromMotorMain {
         System.out.println("Verlustleistung " + sewMotor.getVerlustleistung() + " kW");
         System.out.println("Wirkungsgrad " + sewMotor.getWirkungsgrad() + " %");
     }
-
-    public static Logger getLogger() {
-        return logger;
-    }
 }

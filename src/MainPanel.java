@@ -2,9 +2,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.logging.Logger;
 
 public class MainPanel extends JPanel {
 
+    private static final Logger logger = Logger.getLogger("panel");
 
     MainPanel(final MainFrame frame) {
         setLayout(null);
@@ -16,7 +18,7 @@ public class MainPanel extends JPanel {
         try {
             sewCard = ImageIO.read(new File("src/sew-card.png"));
         } catch (Exception e) {
-            DrehstromMotorMain.getLogger().warning("Failed to read image!");
+            logger.warning("Failed to read image!");
             System.exit(1);
         }
 
