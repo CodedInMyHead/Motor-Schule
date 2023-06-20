@@ -32,10 +32,10 @@ public class DrehstromMotor {
         this.steigung = steigung;
         this.verschiebung = verschiebung;
 
-        if(!isValid()) {
+        /*if(!isValid()) {
             logger.warning("Fatal: Motor configuration is invalid! Exiting the program..");
             System.exit(1);
-        }
+        }*/
 
         logger.info("Motor des Typs " + modell + " wurde erstellt.");
     }
