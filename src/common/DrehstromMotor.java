@@ -1,6 +1,7 @@
 package common;
 
 import java.text.DecimalFormat;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 public class DrehstromMotor {
@@ -15,8 +16,11 @@ public class DrehstromMotor {
     private double uebersetzung;
     private double steigung;
     private double verschiebung;
-    DecimalFormat percentFormat = new DecimalFormat("##.#");
-    DecimalFormat kWFormat = new DecimalFormat("#.###");
+
+    public final Function<Double, Integer> motorFunctionReversed = (Double y) -> (int) -((y - 68.9275) / 0.0455);
+    public final Function<Double, Double> reverseAmpere = (Double y) -> (double) 1000 * (getLeistungsabgabe() / (Math.sqrt(3) * spannung * scheinleistungsQuotient * (getLeistungsabgabe()/getLeistungsabgabe())));
+    public static DecimalFormat percentFormat = new DecimalFormat("##.#");
+    public static DecimalFormat kWFormat = new DecimalFormat("#.###");
     public DrehstromMotor(String modell, double drehzahl, double drehmoment, double spannung, double nennstrom, double scheinleistungsQuotient, double uebersetzung) {
         this(modell, drehzahl, drehmoment, spannung, nennstrom, scheinleistungsQuotient, uebersetzung, 0, 0);
     }
@@ -32,10 +36,10 @@ public class DrehstromMotor {
         this.steigung = steigung;
         this.verschiebung = verschiebung;
 
-        /*if(!isValid()) {
+        if(!isValid()) {
             logger.warning("Fatal: Motor configuration is invalid! Exiting the program..");
             System.exit(1);
-        }*/
+        }
 
         logger.info("Motor des Typs " + modell + " wurde erstellt.");
     }
@@ -69,5 +73,13 @@ public class DrehstromMotor {
             return false;
         }
         return true;
+    }
+
+    public double getDrehmoment() {
+        return this.drehmoment;
+    }
+
+    public void setDrehmoment(double val) {
+        this.drehmoment = val;
     }
 }

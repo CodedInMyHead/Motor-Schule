@@ -8,6 +8,10 @@ import java.io.File;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import static common.DrehstromMotor.kWFormat;
 
 public class MotorFrame extends JFrame {
   private static final Logger logger = Logger.getLogger("gui");
@@ -20,22 +24,22 @@ public class MotorFrame extends JFrame {
   private JLabel heading = new JLabel();
   private JPanel panelOben = new JPanel(null, true);
     private JLabel leistungsAuf = new JLabel();
-    private JTextField leistungAuf = new JTextField();
+    private JLabel leistungAuf = new JLabel();
     private JLabel leistungsAb = new JLabel();
-    private JTextField leistungAb = new JTextField();
+    private JLabel leistungAb = new JLabel();
     private JLabel leistungsVerlust = new JLabel();
-    private JTextField leistungVerlust = new JTextField();
+    private JLabel leistungVerlust = new JLabel();
     private JLabel wirkungsgrad = new JLabel();
-    private JTextField wirkungsgrade = new JTextField();
+    private JLabel wirkungsgrade = new JLabel();
   private JPanel panelMitte = new JPanel(null, true);
     private JLabel titleMitte = new JLabel();
     private JTextField inputMitte = new JTextField();
     private JCheckBox checkBox = new JCheckBox();
   private JPanel panelUnten = new JPanel(null, true);
     private JLabel labelAmpere = new JLabel();
-    private JTextField inputAmpere = new JTextField();
+    private JLabel inputAmpere = new JLabel();
     private JLabel labelDrehzahl = new JLabel();
-    private JTextField inputDrehzahl = new JTextField();
+    private JLabel inputDrehzahl = new JLabel();
   // end attributes
   
   public MotorFrame(final DrehstromMotor motor) {
@@ -91,13 +95,55 @@ public class MotorFrame extends JFrame {
 
     panelMitte.setBounds(16, 240, 352, 128);
     panelMitte.setOpaque(false);
-    panelMitte.setBorder(BorderFactory.createTitledBorder("Lastsimulation Welle "));
+    panelMitte.setBorder(BorderFactory.createTitledBorder("Lastsimulation Welle"));
 
     titleMitte.setBounds(16, 24, 256, 24);
     inputMitte.setBounds(16, 64, 80, 24);
     checkBox.setBounds(16, 96, 248, 24);
 
-    titleMitte.setText("Nennwert: 5 Nm (1,0 Nm bis 6,0Nm)");
+    inputMitte.getDocument().addDocumentListener(new DocumentListener() {
+      @Override
+      public void insertUpdate(DocumentEvent e) {
+        valueChanged();
+      }
+
+      @Override
+      public void removeUpdate(DocumentEvent e) {
+        valueChanged();
+      }
+
+      @Override
+      public void changedUpdate(DocumentEvent e) {
+      }
+
+      private void valueChanged() {
+        final String newValue = inputMitte.getText();
+        logger.info("New value entered: " + newValue);
+        final double d;
+        try {
+          d = Double.parseDouble(newValue);
+
+          if (d > 6 || d < 1) {
+            throw new RuntimeException();
+          }
+        } catch (Exception e) {
+          logger.warning("Invalid value");
+          return;
+        }
+        motor.setDrehmoment(d);
+        inputAmpere.setText(kWFormat.format(motor.reverseAmpere.apply(2.0)));
+        titleMitte.setText("Nennwert: " + motor.getDrehmoment() +  " Nm (1,0 Nm bis 6,0Nm)");
+        final double b = motor.motorFunctionReversed.apply(motor.getDrehmoment());
+        final String val = kWFormat.format(b);
+        inputDrehzahl.setText(val);
+
+
+
+
+      }
+    });
+
+    titleMitte.setText("Nennwert: " + motor.getDrehmoment() +  " Nm (1,0 Nm bis 6,0Nm)");
     checkBox.setText("Drehzahl an Last anpassen lt. Kennlinie");
 
     checkBox.setOpaque(false);
@@ -118,7 +164,9 @@ public class MotorFrame extends JFrame {
     inputDrehzahl.setBounds(224, 80, 80, 24);
 
     labelAmpere.setText("Strom in Ampere ");
+    inputAmpere.setText(kWFormat.format(motor.reverseAmpere.apply(2.0)));
     labelDrehzahl.setText("Drehzahl bei Last");
+    inputDrehzahl.setText(kWFormat.format(motor.motorFunctionReversed.apply(motor.getDrehmoment())));
 
     panelUnten.add(labelAmpere);
     panelUnten.add(inputAmpere);

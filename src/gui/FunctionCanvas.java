@@ -13,7 +13,7 @@ public class FunctionCanvas extends Canvas {
     final int TILE_SIZE;
     final double a = -0.0455;
     final double y = 68.9275;
-    final Function<Integer, Integer> motorFunction = (Integer x) -> (int) -(a * x + y);
+    public final Function<Integer, Integer> motorFunctionNormal = (Integer x) -> (int) -(a * x + y);
 
     FunctionCanvas(int size) {
         this.SIZE = size;
@@ -30,8 +30,8 @@ public class FunctionCanvas extends Canvas {
     void drawGraph(final Graphics g) {
         int internalLenMin = 1295;
         int internalLenMax = (int) (internalLenMin + TILE_COUNT * 27.5);
-        int yMin = motorFunction.apply(internalLenMin);
-        int yMax = motorFunction.apply(internalLenMax);
+        int yMin = motorFunctionNormal.apply(internalLenMin);
+        int yMax = motorFunctionNormal.apply(internalLenMax);
         System.out.println(internalLenMin + "," + yMin + " , " + internalLenMax + "," + yMax);
         g.drawLine(internalLenMin - 1295 + OFFSET_ALL, yMin * FUNCTION_SIZE/TILE_SIZE, internalLenMax - 1295 + OFFSET_ALL, yMax * FUNCTION_SIZE/TILE_SIZE);
         g.translate(OFFSET_ALL, FUNCTION_SIZE + OFFSET_ALL);

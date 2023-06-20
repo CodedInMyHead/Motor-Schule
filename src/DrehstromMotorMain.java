@@ -10,15 +10,12 @@ public class DrehstromMotorMain {
 
     private static final Logger logger = Logger.getLogger("main");
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+
         new MotorFrame(new DrehstromMotor("modell", 1405, 5, 230, 1.26, 0.66, 3.37));
+        //Scanner sc = new Scanner(System.in);
+        // Command Line basic 4 only
         /*
         while (true) {
-
-            // TODO: double steigung;
-            // TODO: double verschiebung;
-            // TODO: Change motor validation from constructor to input and default to a valid one
-
             String modell = getStringInput(sc, "Modell", false);
             double drehzahl = getDoubleInput(sc, "Drehzahl", false, 0, Double.MAX_VALUE);
             double drehmoment = getDoubleInput(sc, "Drehmoment", false, 0, Double.MAX_VALUE);
@@ -79,10 +76,10 @@ public class DrehstromMotorMain {
             }
             return input;
         } catch (InputMismatchException e) {
-            logger.info("Es ist ein fehler aufgetreten. Hier ist ein double erwartet. (Bsp.: 12,1 oder 1)");
+            logger.info("Es ist ein Fehler aufgetreten. Hier ist ein double erwartet. (Bsp.: 12,1 oder 1)");
             return getDoubleInput(sc, what, true, min, max);
         } catch (IllegalArgumentException e) {
-            logger.info("Es ist ein fehler aufgetreten. Der/Die " + what + " muss zwischen " + min + " und " + max + " liegen.");
+            logger.info("Es ist ein Fehler aufgetreten. Der/Die " + what + " muss zwischen " + min + " und " + max + " liegen.");
             return getDoubleInput(sc, what, true, min, max);
         }
     }
