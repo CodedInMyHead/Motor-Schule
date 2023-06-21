@@ -7,13 +7,13 @@ import java.util.logging.Logger;
 public class DrehstromMotor {
 
     private static final Logger logger = Logger.getLogger("motor");
-    private String modell;
-    private double drehzahl;
+    private final String modell;
+    private final double drehzahl;
     private double drehmoment;
     private double spannung;
-    private double nennstrom;
+    private final double nennstrom;
     private double scheinleistungsQuotient;
-    private double uebersetzung;
+    private final double uebersetzung;
     private final double steigung;
     private final double verschiebung;
     public final Function<Double, Double> getDrehzahlFunction = (Double y) -> (double) ((drehmoment - 68.9275) / -0.0455);

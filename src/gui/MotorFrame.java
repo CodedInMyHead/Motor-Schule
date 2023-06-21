@@ -19,25 +19,27 @@ public class MotorFrame extends JFrame {
   private final static int HEIGHT = 800;
   private final static String TEXT_HEADING = "Lastsimulation anhand eines SEW-Drehstromgetriebemotors, Modell: ";
   private final static String TITLE = "Lastsimulation";
-  private JLabel heading = new JLabel();
-  private JPanel panelOben = new JPanel(null, true);
-  private JLabel leistungsAuf = new JLabel();
-  private JLabel leistungAuf = new JLabel();
-  private JLabel leistungsAb = new JLabel();
-  private JLabel leistungAb = new JLabel();
-  private JLabel leistungsVerlust = new JLabel();
-  private JLabel leistungVerlust = new JLabel();
-  private JLabel wirkungsgrad = new JLabel();
-  private JLabel wirkungsgrade = new JLabel();
-  private JPanel panelMitte = new JPanel(null, true);
-  private JLabel titleMitte = new JLabel();
-  private JTextField inputMitte = new JTextField();
-  private JCheckBox checkBox = new JCheckBox();
-  private JPanel panelUnten = new JPanel(null, true);
-  private JLabel labelAmpere = new JLabel();
-  private JLabel inputAmpere = new JLabel();
-  private JLabel labelDrehzahl = new JLabel();
-  private JLabel inputDrehzahl = new JLabel();
+  private final JLabel heading = new JLabel();
+  private final JPanel panelOben = new JPanel(null, true);
+  private final JLabel leistungsAuf = new JLabel();
+  private final JLabel leistungAuf = new JLabel();
+  private final JLabel leistungsAb = new JLabel();
+  private final JLabel leistungAb = new JLabel();
+  private final JLabel leistungsVerlust = new JLabel();
+  private final JLabel leistungVerlust = new JLabel();
+  private final JLabel wirkungsgrad = new JLabel();
+  private final JLabel wirkungsgrade = new JLabel();
+  private final JPanel panelMitte = new JPanel(null, true);
+  private final JLabel titleMitte = new JLabel();
+  private final JTextField inputMitte = new JTextField();
+  private final JCheckBox checkBox = new JCheckBox();
+  private final JPanel panelUnten = new JPanel(null, true);
+  private final JLabel labelAmpere = new JLabel();
+  private final JLabel inputAmpere = new JLabel();
+  private final JLabel labelDrehzahl = new JLabel();
+  private final JLabel inputDrehzahl = new JLabel();
+
+  private final Canvas canvas;
   
   public MotorFrame(final DrehstromMotor motor) {
     super();
@@ -193,7 +195,7 @@ public class MotorFrame extends JFrame {
     // Add Canvas
 
     final int HEIGHT_CANVAS = 500;
-    final Canvas canvas = new FunctionCanvas(HEIGHT_CANVAS);
+    canvas = new FunctionCanvas(HEIGHT_CANVAS);
     canvas.setBounds(378+10, 55 + height + 20, HEIGHT_CANVAS, HEIGHT_CANVAS);
     canvas.setBackground(Color.LIGHT_GRAY);
 

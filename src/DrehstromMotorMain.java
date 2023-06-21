@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 public class DrehstromMotorMain {
 
     private static final Logger logger = Logger.getLogger("main");
+    private static MotorFrame frame;
     public static void main(String[] args) {
 
         final Scanner sc = new Scanner(System.in);
@@ -15,7 +16,7 @@ public class DrehstromMotorMain {
         final String choice = sc.nextLine();
 
         if (!choice.equals("1")) {
-            new MotorFrame(new DrehstromMotor());
+            frame = new MotorFrame(new DrehstromMotor());
         } else {
             while (true) {
                 final String modell = getStringInput(sc, "Modell", false);
@@ -37,7 +38,7 @@ public class DrehstromMotorMain {
                 sc.nextLine();
                 final String doContinue = sc.nextLine();
 
-                if (!doContinue.toLowerCase().equals("y")) {
+                if (!doContinue.equalsIgnoreCase("y")) {
                     logger.info("Exiting..");
                     sc.close();
                     System.exit(1);
