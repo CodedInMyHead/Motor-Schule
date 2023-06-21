@@ -17,36 +17,33 @@ public class MotorFrame extends JFrame {
   private static final Logger logger = Logger.getLogger("gui");
   private final static int WIDTH = 962;
   private final static int HEIGHT = 800;
-  private final static String TEXT_HEADING = "Lastsimulation anhand eines SEW-Drehstromgetriebemotors";
+  private final static String TEXT_HEADING = "Lastsimulation anhand eines SEW-Drehstromgetriebemotors, Modell: ";
   private final static String TITLE = "Lastsimulation";
-
-  // start attributes
   private JLabel heading = new JLabel();
   private JPanel panelOben = new JPanel(null, true);
-    private JLabel leistungsAuf = new JLabel();
-    private JLabel leistungAuf = new JLabel();
-    private JLabel leistungsAb = new JLabel();
-    private JLabel leistungAb = new JLabel();
-    private JLabel leistungsVerlust = new JLabel();
-    private JLabel leistungVerlust = new JLabel();
-    private JLabel wirkungsgrad = new JLabel();
-    private JLabel wirkungsgrade = new JLabel();
+  private JLabel leistungsAuf = new JLabel();
+  private JLabel leistungAuf = new JLabel();
+  private JLabel leistungsAb = new JLabel();
+  private JLabel leistungAb = new JLabel();
+  private JLabel leistungsVerlust = new JLabel();
+  private JLabel leistungVerlust = new JLabel();
+  private JLabel wirkungsgrad = new JLabel();
+  private JLabel wirkungsgrade = new JLabel();
   private JPanel panelMitte = new JPanel(null, true);
-    private JLabel titleMitte = new JLabel();
-    private JTextField inputMitte = new JTextField();
-    private JCheckBox checkBox = new JCheckBox();
+  private JLabel titleMitte = new JLabel();
+  private JTextField inputMitte = new JTextField();
+  private JCheckBox checkBox = new JCheckBox();
   private JPanel panelUnten = new JPanel(null, true);
-    private JLabel labelAmpere = new JLabel();
-    private JLabel inputAmpere = new JLabel();
-    private JLabel labelDrehzahl = new JLabel();
-    private JLabel inputDrehzahl = new JLabel();
-  // end attributes
+  private JLabel labelAmpere = new JLabel();
+  private JLabel inputAmpere = new JLabel();
+  private JLabel labelDrehzahl = new JLabel();
+  private JLabel inputDrehzahl = new JLabel();
   
   public MotorFrame(final DrehstromMotor motor) {
     super();
     setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     setSize(WIDTH, HEIGHT);
-    Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+    final Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
     final int x = (d.width - getSize().width) / 2;
     final int y = (d.height - getSize().height) / 2;
     setLocation(x, y);
@@ -56,12 +53,12 @@ public class MotorFrame extends JFrame {
     cp.setLayout(null);
     
     heading.setBounds(16, 16, 632, 24);
-    heading.setText(TEXT_HEADING);
+    heading.setText(TEXT_HEADING + motor.getModel());
 
     // PANEL Oben
     panelOben.setBounds(16, 48, 352, 176);
     panelOben.setOpaque(false);
-    panelOben.setBorder(BorderFactory.createTitledBorder("Nennwerte mit Leistungsschild"));
+    panelOben.setBorder(BorderFactory.createTitledBorder(" Nennwerte mit Leistungsschild "));
 
     leistungsAuf.setBounds(8, 40, 151, 24);
     leistungAuf.setBounds(216, 40, 80, 24);
@@ -72,14 +69,14 @@ public class MotorFrame extends JFrame {
     wirkungsgrad.setBounds(8, 136, 160, 24);
     wirkungsgrade.setBounds(216, 136, 80, 24);
 
-    leistungsAuf.setText("Leistungsaufnahme in Kw");
-    leistungsAb.setText("Leistungsabgabe in Kw");
-    leistungsVerlust.setText("Verlustleistung in Kw");
-    wirkungsgrad.setText("Wirkunsgrad in Prozent ");
-    leistungAuf.setText(motor.getLeistungsaufnahme() + "");
-    leistungAb.setText(motor.getLeistungsabgabe() + "");
-    leistungVerlust.setText(motor.getVerlustleistung() + "");
-    wirkungsgrade.setText(motor.getWirkungsgrad() + "");
+    leistungsAuf.setText("Leistungsaufnahme");
+    leistungsAb.setText("Leistungsabgabe");
+    leistungsVerlust.setText("Verlustleistung");
+    wirkungsgrad.setText("Wirkunsgrad in Prozent");
+    leistungAuf.setText(motor.getLeistungsaufnahme() + " kW");
+    leistungAb.setText(motor.getLeistungsabgabe() + " kW");
+    leistungVerlust.setText(motor.getVerlustleistung() + " kW");
+    wirkungsgrade.setText(motor.getWirkungsgrad() + " %");
 
 
     panelOben.add(leistungsAuf);
@@ -95,7 +92,7 @@ public class MotorFrame extends JFrame {
 
     panelMitte.setBounds(16, 240, 352, 128);
     panelMitte.setOpaque(false);
-    panelMitte.setBorder(BorderFactory.createTitledBorder("Lastsimulation Welle"));
+    panelMitte.setBorder(BorderFactory.createTitledBorder(" Lastsimulation Welle "));
 
     titleMitte.setBounds(16, 24, 256, 24);
     inputMitte.setBounds(16, 64, 80, 24);
@@ -124,22 +121,23 @@ public class MotorFrame extends JFrame {
           d = Double.parseDouble(newValue);
 
           if (d > 6 || d < 1) {
-            throw new RuntimeException();
+            throw new RuntimeException("VALUE IS OUT OF RANGE");
           }
         } catch (Exception e) {
           logger.warning("Invalid value");
           return;
         }
+        motor.oldPab = motor.getLeistungsabgabe();
         motor.setDrehmoment(d);
         inputAmpere.setText(kWFormat.format(motor.reverseAmpere.apply(2.0)));
         titleMitte.setText("Nennwert: " + motor.getDrehmoment() +  " Nm (1,0 Nm bis 6,0Nm)");
-        final double b = motor.motorFunctionReversed.apply(motor.getDrehmoment());
-        final String val = kWFormat.format(b);
-        inputDrehzahl.setText(val);
-
-
-
-
+        final double drehzahl = motor.getDrehzahlFunction.apply(motor.getDrehmoment());
+        final String drehzahlString = kWFormat.format(drehzahl);
+        inputDrehzahl.setText(drehzahlString);
+        leistungAuf.setText(motor.getLeistungsaufnahme() + " kW");
+        leistungAb.setText(motor.getLeistungsabgabe() + " kW");
+        leistungVerlust.setText(motor.getVerlustleistung() + " kW");
+        wirkungsgrade.setText(motor.getWirkungsgrad() + " %");
       }
     });
 
@@ -156,7 +154,7 @@ public class MotorFrame extends JFrame {
 
     panelUnten.setBounds(16, 392, 352, 120);
     panelUnten.setOpaque(false);
-    panelUnten.setBorder(BorderFactory.createTitledBorder("Ausgabe Strom und Drehzahl "));
+    panelUnten.setBorder(BorderFactory.createTitledBorder(" Ausgabe Strom und Drehzahl "));
 
     labelAmpere.setBounds(16, 40, 103, 24);
     inputAmpere.setBounds(224, 40, 80, 24);
@@ -166,7 +164,7 @@ public class MotorFrame extends JFrame {
     labelAmpere.setText("Strom in Ampere ");
     inputAmpere.setText(kWFormat.format(motor.reverseAmpere.apply(2.0)));
     labelDrehzahl.setText("Drehzahl bei Last");
-    inputDrehzahl.setText(kWFormat.format(motor.motorFunctionReversed.apply(motor.getDrehmoment())));
+    inputDrehzahl.setText(kWFormat.format(motor.getDrehzahlFunction.apply(motor.getDrehmoment())));
 
     panelUnten.add(labelAmpere);
     panelUnten.add(inputAmpere);
@@ -183,12 +181,12 @@ public class MotorFrame extends JFrame {
       System.exit(1);
     }
 
-    double scale = 1.4;
-    int width = (int) (244 * scale);
-    int height = (int) (134 * scale);
+    final double scale = 1.4;
+    final int width = (int) (244 * scale);
+    final int height = (int) (134 * scale);
 
     final ImageIcon scaledIcon = new ImageIcon(new ImageIcon(sewCard).getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH));
-    JLabel image = new JLabel(scaledIcon);
+    final JLabel image = new JLabel(scaledIcon);
     image.setBounds(378+10, 48+7, width, height);
     image.setOpaque(false);
 

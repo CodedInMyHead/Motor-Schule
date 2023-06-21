@@ -7,18 +7,19 @@ import java.util.logging.Logger;
 public class DrehstromMotor {
 
     private static final Logger logger = Logger.getLogger("motor");
-    private  String modell;
+    private String modell;
     private double drehzahl;
     private double drehmoment;
     private double spannung;
     private double nennstrom;
     private double scheinleistungsQuotient;
     private double uebersetzung;
-    private double steigung;
-    private double verschiebung;
-
-    public final Function<Double, Integer> motorFunctionReversed = (Double y) -> (int) -((y - 68.9275) / 0.0455);
-    public final Function<Double, Double> reverseAmpere = (Double y) -> (double) 1000 * (getLeistungsabgabe() / (Math.sqrt(3) * spannung * scheinleistungsQuotient * (getLeistungsabgabe()/getLeistungsabgabe())));
+    private final double steigung;
+    private final double verschiebung;
+    public final Function<Double, Double> getDrehzahlFunction = (Double y) -> (double) ((drehmoment - 68.9275) / -0.0455);
+    public double oldPab = getLeistungsabgabe();
+    public final Function<Double, Double> getFaktor = (Double y) -> (double) (getLeistungsabgabe()/oldPab);
+    public final Function<Double, Double> reverseAmpere = (Double y) -> (double) 1000 * (getLeistungsabgabe() / (Math.sqrt(3) * spannung * scheinleistungsQuotient * (getLeistungsabgabe()/getLeistungsaufnahme()*getFaktor.apply(0.0))));
     public static DecimalFormat percentFormat = new DecimalFormat("##.#");
     public static DecimalFormat kWFormat = new DecimalFormat("#.###");
     public DrehstromMotor(String modell, double drehzahl, double drehmoment, double spannung, double nennstrom, double scheinleistungsQuotient, double uebersetzung) {
@@ -44,14 +45,16 @@ public class DrehstromMotor {
         logger.info("Motor des Typs " + modell + " wurde erstellt.");
     }
 
-    public DrehstromMotor() {}
+    public DrehstromMotor() {
+        this("R27 Brötchen Käse", 1405, 5, 230, 1.26, 0.66, 3.37);
+    }
 
     public double getLeistungsaufnahme() {
         return Double.parseDouble((kWFormat.format((Math.sqrt(3) * spannung * nennstrom * scheinleistungsQuotient) / 1000)).replace(",", "."));
     }
 
     public double getLeistungsabgabe() {
-        return Double.parseDouble((kWFormat.format((( drehmoment * (drehzahl / uebersetzung)) / 9549))).replace(",","."));
+        return Double.parseDouble((kWFormat.format((( drehmoment * ( getDrehzahlFunction.apply(drehmoment)/ uebersetzung)) / 9549))).replace(",","."));
     }
 
     public double getVerlustleistung() {
@@ -81,5 +84,9 @@ public class DrehstromMotor {
 
     public void setDrehmoment(double val) {
         this.drehmoment = val;
+    }
+
+    public String getModel() {
+        return this.modell;
     }
 }
